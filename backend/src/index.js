@@ -13,13 +13,12 @@ dotenv.config();
 
 const PORT = process.env.PORT || 5000;
 const __dirname = path.resolve();
-const BASE_URL = "https://chill-chat-9do2.onrender.com/api";
 
 app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://chill-chat-9do2.onrender.com/api", // Adjust based on your frontend port
+    origin: "http://localhost:5173", // Adjust based on your frontend port
     credentials: true,
   })
 );
