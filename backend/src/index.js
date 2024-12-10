@@ -27,10 +27,10 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
 // Basic route for testing
-app.get("/", (req, res) => {
-  console.log("Root route hit");
-  res.send("Hello, welcome to the backend server!");
-});
+//app.get("/", (req, res) => {
+  //console.log("Root route hit");
+  //res.send("Hello, welcome to the backend server!");
+//});
 
 // Static file serving for production
 if (process.env.NODE_ENV === "production") {
