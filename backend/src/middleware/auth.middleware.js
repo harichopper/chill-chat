@@ -9,10 +9,16 @@ export const protectRoute = async (req, res, next) => {
       return res.status(401).json({ message: "Unauthorized - No Token Provided" });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-    if (!decoded) {
-      return res.status(401).json({ message: "Unauthorized - Invalid Token" });
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (error) {
+      if (error instanceof jwt.JsonWebTokenError) {
+        return res.status(401).json({ message: "Unauthorized - Invalid Token" });
+      } else if (error instanceof jwt.TokenExpiredError) {
+        return res.status(401).json({ message: "Unauthorized - Token Expired" });
+      }
+      return res.status(500).json({ message: "Internal Server Error" });
     }
 
     const user = await User.findById(decoded.userId).select("-password");
