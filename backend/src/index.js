@@ -17,12 +17,25 @@ const __dirname = path.resolve();
 
 app.use(express.json());
 app.use(cookieParser());
+const allowedOrigins = [
+  "http://localhost:5173", // Development frontend
+  "https://chill-chat-9do2.onrender.com", // Production frontend
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173", // Adjust based on your frontend port
-    credentials: true,
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or Postman)
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true, // Allow cookies or credentials
   })
 );
+
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
