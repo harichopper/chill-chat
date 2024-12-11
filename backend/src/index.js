@@ -20,35 +20,16 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Your frontend URL
-    credentials: true, // Enable cookies to be sent along with the request
+    origin: ["http://localhost:5173", "/backend"],
+    credentials: true,
   })
 );
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-
-    if (allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  methods: ['GET', 'POST','PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-};
-
-app.use(cors(corsOptions));
 
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-// app.get("/",(req,res)=>{
-//   console.log("server started");
-//   res.send("Server is running");
-// });
+
 
 app.use((err, req, res, next) => {
   if (err.name === "CorsError") {
@@ -60,6 +41,7 @@ app.use((err, req, res, next) => {
 });
 
 
+// Basic route for testing
 app.get("/", (req, res) => {
   console.log("Root route hit");
   res.send("Hello, welcome to the backend server!");
