@@ -29,10 +29,10 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-app.get("/",(req,res)=>{
-  console.log("server started");
-  res.send("Server is running");
-});
+// app.get("/",(req,res)=>{
+//   console.log("server started");
+//   res.send("Server is running");
+// });
 
 app.use((err, req, res, next) => {
   if (err.name === "CorsError") {
@@ -44,11 +44,10 @@ app.use((err, req, res, next) => {
 });
 
 
-// Basic route for testing
-//app.get("/", (req, res) => {
-  //console.log("Root route hit");
-  //res.send("Hello, welcome to the backend server!");
-//});
+app.get("/", (req, res) => {
+  console.log("Root route hit");
+  res.send("Hello, welcome to the backend server!");
+});
 
 // Static file serving for production
 if (process.env.NODE_ENV === "production") {
