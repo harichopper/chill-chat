@@ -18,12 +18,25 @@ const __dirname = path.resolve();
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(
-  cors({
-    origin: [""],
-    credentials: true,
-  })
-);
+const allowedOrigins = [
+  "*"
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST','PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+};
+
+app.use(cors(corsOptions));
 
 
 app.use("/api/auth", authRoutes);
