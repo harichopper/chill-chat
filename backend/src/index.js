@@ -18,9 +18,12 @@ const __dirname = path.resolve();
 app.use(express.json());
 app.use(cookieParser());
 
-const allowedOrigins = [
-  "*"
-];
+app.use(
+  cors({
+    origin: "http://localhost:5173", // Your frontend URL
+    credentials: true, // Enable cookies to be sent along with the request
+  })
+);
 
 const corsOptions = {
   origin: function (origin, callback) {
