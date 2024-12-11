@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://chill-chat-9do2.onrender.com"],
+    origin: ["http://localhost:5173"],
     credentials: true,
   })
 );
@@ -28,6 +28,11 @@ app.use(
 
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
+
+app.get("/",(req,res)=>{
+  console.log("server started");
+  res.send("Server is running");
+});
 
 app.use((err, req, res, next) => {
   if (err.name === "CorsError") {
