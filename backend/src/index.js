@@ -19,7 +19,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "http://localhost:5173", // Adjust based on your frontend port
+    origin: process.env.NODE_ENV === "production" 
+      ? "https://chill-chat-9do2.onrender.com" // Production frontend
+      : "http://localhost:5173", // Development frontend
     credentials: true,
   })
 );
