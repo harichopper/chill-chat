@@ -45,7 +45,7 @@ app.use("/api/messages", messageRoutes);
 // Default route
 // Default backend route
 app.get("/", (req, res) => {
-  res.send("Welcome to ChillChat API");
+  res.redirect("/login");
 });
 
 // Catch-all for unknown API routes
