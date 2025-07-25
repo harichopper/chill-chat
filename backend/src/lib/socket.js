@@ -11,7 +11,7 @@ const io = new Server(server, {
     origin: [
       "http://localhost:5173",
       "https://chill-chat-cyan.vercel.app",
-      "https://chill-chat-r4pg.vercel.app",
+      "https://chill-chat-r4pg-harics-projects-ad7a45e9.vercel.app",
       "https://chill-chat-9do2.onrender.com"
     ],
     methods: ["GET", "POST"],
