@@ -31,7 +31,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:5001",
-      "https://chill-chat-r4pg.vercel.app", // Vercel frontend
+      "https://chill-chat-9do2.onrender.com", // Vercel frontend
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
