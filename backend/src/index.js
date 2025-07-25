@@ -55,7 +55,7 @@ app.all("*", (req, res) => {
 
 // No need to serve frontend if using Vercel
 // If you do want SSR fallback for future use, uncomment below:
-/*
+
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
@@ -63,7 +63,7 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
   });
 }
-*/
+
 
 // Global error handler
 app.use((err, req, res, next) => {
