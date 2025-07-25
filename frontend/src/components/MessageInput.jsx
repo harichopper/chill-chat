@@ -11,8 +11,8 @@ const MessageInput = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (!file.type.startsWith("image/")) {
-      toast.error("Please select an image file");
+    if (!file || !file.type.startsWith("image/")) {
+      toast.error("Please select a valid image file");
       return;
     }
 
@@ -30,20 +30,47 @@ const MessageInput = () => {
 
   const handleSendMessage = async (e) => {
     e.preventDefault();
-    if (!text.trim() && !imagePreview) return;
+    if (!text.trim() && !fileInputRef.current?.files[0]) return;
+
+    let imageUrl = null;
 
     try {
+      if (fileInputRef.current?.files[0]) {
+        const file = fileInputRef.current.files[0];
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "haricdon"); // ✅ Your actual preset
+        formData.append("folder", "social-media");     // ✅ Target folder in Cloudinary
+
+        const cloudinaryRes = await fetch(
+          "https://api.cloudinary.com/v1_1/dsalogt8w/image/upload",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+
+        const data = await cloudinaryRes.json();
+
+        if (!data.secure_url) {
+          toast.error(data.error?.message || "Image upload failed");
+          return;
+        }
+
+        imageUrl = data.secure_url;
+      }
+
       await sendMessage({
         text: text.trim(),
-        image: imagePreview,
+        image: imageUrl,
       });
 
-      // Clear form
       setText("");
       setImagePreview(null);
       if (fileInputRef.current) fileInputRef.current.value = "";
     } catch (error) {
       console.error("Failed to send message:", error);
+      toast.error("Failed to send message");
     }
   };
 
@@ -59,8 +86,7 @@ const MessageInput = () => {
             />
             <button
               onClick={removeImage}
-              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-base-300
-              flex items-center justify-center"
+              className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-base-300 flex items-center justify-center"
               type="button"
             >
               <X className="size-3" />
@@ -88,8 +114,9 @@ const MessageInput = () => {
 
           <button
             type="button"
-            className={`hidden sm:flex btn btn-circle
-                     ${imagePreview ? "text-emerald-500" : "text-zinc-400"}`}
+            className={`hidden sm:flex btn btn-circle ${
+              imagePreview ? "text-emerald-500" : "text-zinc-400"
+            }`}
             onClick={() => fileInputRef.current?.click()}
           >
             <Image size={20} />
@@ -106,4 +133,5 @@ const MessageInput = () => {
     </div>
   );
 };
+
 export default MessageInput;
