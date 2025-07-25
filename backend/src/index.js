@@ -56,8 +56,7 @@ app.use((err, req, res, next) => {
 
 // Root route
 app.get("/", (req, res) => {
-  console.log("Root route hit");
-  res.send("Hello, welcome to the backend server!");
+  res.redirect("/api/auth/login"); // or "/api/auth/signup"
 });
 
 // Serve frontend in production
