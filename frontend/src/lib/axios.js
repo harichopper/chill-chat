@@ -3,7 +3,7 @@ import axios from "axios";
 const BACKEND_URLS = {
   local: "http://localhost:5001/api",
   render: "https://chill-chat-9do2.onrender.com/api",
-  vercel: "https://chill-chat-r4pg.vercel.app/api"
+  vercel: "https://chill-chat-cyan.vercel.app/api"
 };
 
 // Logic to pick the correct backend URL
