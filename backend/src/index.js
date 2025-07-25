@@ -43,14 +43,16 @@ app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
 // Default route
+// Default backend route
 app.get("/", (req, res) => {
-  res.redirect("/login"); // Redirect to login page
+  res.send("Welcome to ChillChat API");
 });
 
 // Catch-all for unknown API routes
 app.all("*", (req, res) => {
   res.status(404).json({ error: "Route not found" });
 });
+
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
