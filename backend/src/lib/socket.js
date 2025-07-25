@@ -1,46 +1,66 @@
-import { Server } from "socket.io";
-import http from "http";
+// server/socket.js or wherever you configure Socket.IO
 import express from "express";
+import http from "http";
+import { Server } from "socket.io";
 
 const app = express();
 const server = http.createServer(app);
 
-// ✅ Allow multiple frontends for socket.io CORS
+// Allow both local and production frontends to connect
 const io = new Server(server, {
   cors: {
     origin: [
-      "http://localhost:5173",
-      "https://chill-chat-cyan.vercel.app",
-      "https://chill-chat-r4pg-harics-projects-ad7a45e9.vercel.app",
-      "https://chill-chat-9do2.onrender.com"
+      "http://localhost:5173",                     // Local frontend
+      "https://chill-chat-9do2.onrender.com",        //  frontend
     ],
     methods: ["GET", "POST"],
-    credentials: true
-  }
+    credentials: true,
+  },
 });
 
-// ✅ Online user mapping
+// Store userId to socketId mapping
 const userSocketMap = {}; // { userId: socketId }
 
 export function getReceiverSocketId(userId) {
   return userSocketMap[userId];
 }
 
-// ✅ Socket connection
 io.on("connection", (socket) => {
-  console.log("🔌 A user connected:", socket.id);
+  console.log("🔌 User connected:", socket.id);
 
   const userId = socket.handshake.query.userId;
-  if (userId) userSocketMap[userId] = socket.id;
 
-  // Broadcast updated online users
+  if (userId) {
+    userSocketMap[userId] = socket.id;
+    console.log(`✅ User ${userId} registered with socket ID ${socket.id}`);
+  }
+
+  // Broadcast updated list of online users
   io.emit("getOnlineUsers", Object.keys(userSocketMap));
 
+  // Handle disconnection
   socket.on("disconnect", () => {
-    console.log("❌ A user disconnected:", socket.id);
-    if (userId) delete userSocketMap[userId];
-    io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    console.log("❌ User disconnected:", socket.id);
+
+    if (userId) {
+      delete userSocketMap[userId];
+      io.emit("getOnlineUsers", Object.keys(userSocketMap));
+    }
+  });
+
+  // Notification handler
+  socket.on("sendNotification", ({ receiverId, type, message }) => {
+    const receiverSocketId = getReceiverSocketId(receiverId);
+
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit("receiveNotification", {
+        type,
+        message,
+      });
+      console.log(`📨 Sent ${type} notification to ${receiverId}`);
+    }
   });
 });
 
-export { io, app, server };
+// Export the initialized app and server
+export { app, server, io };
