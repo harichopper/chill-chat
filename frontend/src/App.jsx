@@ -12,7 +12,6 @@ import { useThemeStore } from "./store/useThemeStore";
 import { useEffect } from "react";
 import { Loader } from "lucide-react";
 import { Toaster, toast } from "react-hot-toast";
-
 import { connectSocket } from "./lib/socket";
 
 const App = () => {
@@ -28,12 +27,12 @@ const App = () => {
       const socket = connectSocket(authUser._id);
 
       socket.on("connect", () => {
-        console.log("✅ Socket connected:", socket.id);
+        console.log("Socket connected:", socket.id);
       });
 
       socket.on("getOnlineUsers", (users) => {
-        console.log("🌐 Online users:", users);
-        setOnlineUsers(users);
+        console.log("Online users:", users);
+        setOnlineUsers(users); // Optional: Update global store
       });
 
       socket.on("receiveNotification", ({ type, message }) => {
@@ -44,7 +43,7 @@ const App = () => {
         socket.disconnect();
       };
     }
-  }, [authUser?._id]);
+  }, [authUser]);
 
   if (isCheckingAuth && !authUser)
     return (
