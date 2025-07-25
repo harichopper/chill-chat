@@ -31,7 +31,7 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:5001",
-      "https://chill-chat-9do2.onrender.com", // Your frontend on Vercel
+      "https://chill-chat-9do2.onrender.com", // Vercel frontend
     ],
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -43,19 +43,12 @@ app.use(
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
 
-// Default backend route
+// Basic testing route
 app.get("/", (req, res) => {
-  res.redirect("/login");
+  res.redirect("/login"); // You can change this to any valid route
 });
 
-// Catch-all for unknown API routes
-app.all("*", (req, res) => {
-  res.status(404).json({ error: "Route not found" });
-});
-
-// No need to serve frontend if using Vercel
-// If you do want SSR fallback for future use, uncomment below:
-
+// Serve static frontend files in production
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
@@ -63,7 +56,6 @@ if (process.env.NODE_ENV === "production") {
     res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
   });
 }
-
 
 // Global error handler
 app.use((err, req, res, next) => {
