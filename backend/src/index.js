@@ -20,7 +20,7 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://chill-chat-9do2.onrender.com"],
+    origin: ["http://localhost:5173", "https://chill-chat-r4pg.vercel.app","https://chill-chat-9do2.onrender.com"],
     credentials: true,
   })
 );
