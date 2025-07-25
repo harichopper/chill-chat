@@ -56,7 +56,7 @@ app.use((err, req, res, next) => {
 
 // Root route
 app.get("/", (req, res) => {
-  res.redirect("/api/auth/login"); // or "/api/auth/signup"
+  res.redirect("/login"); // or "/api/auth/signup"
 });
 
 // Serve frontend in production
