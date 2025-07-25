@@ -5,8 +5,7 @@ import { io } from "socket.io-client";
 
 // Corrected BASE_URL for development and production
 const BASE_URL = import.meta.env.MODE === "development"
-  ? "http://localhost:5001"
-  :"https://chill-chat-r4pg-harics-projects-ad7a45e9.vercel.app"// Local backend for development
+  ? "http://localhost:5001"// Local backend for development
   : "https://chill-chat-9do2.onrender.com"; // Deployed backend for production
 
 export const useAuthStore = create((set, get) => ({
