@@ -17,7 +17,8 @@ const __dirname = path.resolve();
 // ✅ Define allowed frontend origins only
 const allowedOrigins = [
   "http://localhost:5173", // Local frontend (Vite dev server)
-  "https://chill-chat-r4pg.vercel.app" // Deployed frontend (Vercel)
+  "https://chill-chat-r4pg.vercel.app",
+  "https://chill-chat-9do2.onrender.com"// Deployed frontend (Vercel)
 ];
 
 // ✅ CORS middleware with origin function for better error handling
