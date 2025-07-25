@@ -3,16 +3,10 @@ import { axiosInstance } from "../lib/axios.js";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
-// Define 3 different URLs
-const LOCAL_BACKEND = "http://localhost:5001";
-const PROD_BACKEND = "https://chill-chat-9do2.onrender.com";
-const PROD_FRONTEND = "https://chill-chat-r4pg.vercel.app"; // Frontend for redirection
-
-const MODE = import.meta.env.MODE;
-
-// Decide which URLs to use based on mode
-const BASE_URL = MODE === "development" ? LOCAL_BACKEND : PROD_BACKEND;
-const FRONTEND_URL = MODE === "development" ? "http://localhost:5173" : PROD_FRONTEND;
+// Corrected BASE_URL for development and production
+const BASE_URL = import.meta.env.MODE === "development"
+  ? "http://localhost:5001" // Local backend for development
+  : "https://chill-chat-r4pg.vercel.app"; // Deployed backend for production
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
@@ -74,9 +68,6 @@ export const useAuthStore = create((set, get) => ({
       set({ authUser: null });
       toast.success("Logged out successfully");
       get().disconnectSocket();
-
-      // Optional redirect after logout
-      window.location.href = FRONTEND_URL;
     } catch (error) {
       toast.error(error.response?.data?.message || "Logout failed");
     }
